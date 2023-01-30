@@ -1,0 +1,29 @@
+---
+version: "3"
+
+networks:
+  caddy:
+    # create the 'caddy' network
+    # name: caddy
+    # use external 'caddy' network
+    external: true
+
+services:
+  caddy:
+    # https://hub.docker.com/_/caddy
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    #extra_hosts:
+    #  - "host.docker.internal:172.17.0.1"
+    ports:
+      - "80:80"
+      - "443:443"
+      # - "2019:2019"
+    volumes:
+      - ./cnf/Caddyfile:/etc/caddy/Caddyfile
+      - ./app:/data/caddy
+      - ./www:/srv
+      # - ./config:/config  # not required
+    networks:
+      - caddy

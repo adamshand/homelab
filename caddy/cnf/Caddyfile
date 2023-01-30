@@ -1,0 +1,65 @@
+# label based caddy (like traefik)
+# https://github.com/lucaslorentz/caddy-docker-proxy
+
+{
+  email adam+mahoe@spack.org
+  #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+
+  default_sni mahoe.haume.nz
+  #acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+  #debug
+}
+
+(sec_headers) {
+  Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  X-Xss-Protection "1; mode=block"
+  X-Content-Type-Options "nosniff"
+  X-Frame-Options "DENY"
+  Content-Security-Policy "upgrade-insecure-requests"
+  Referrer-Policy "strict-origin-when-cross-origin"
+  Cache-Control "public, max-age=15, must-revalidate"
+  Feature-Policy "accelerometer 'none'; ambient-light-sensor 'none'; autoplay 'self'; camera 'none'; encrypted-media 'none'; fullscreen 'self';"
+}
+
+(fwd_headers) {
+  header_up X-Forwarded-Ssl on
+  header_up Host {host}
+  header_up X-Real-IP {remote}
+  header_up X-Forwarded-For {remote}
+  header_up X-Forwarded-Port {server_port}
+  header_up X-Forwarded-Proto {scheme}
+  header_up X-Url-Scheme {scheme}
+  header_up X-Forwarded-Host {host}
+}
+
+# redir + auth example
+#mysql.haume.nz {
+#  route {
+#    basicauth {
+#      adam JDJhJDEwJEVCNmdaNEg2Ti5iejRMYkF3MFZhZ3VtV3E1SzBWZEZ5Q3VWc0tzOEJwZE9TaFlZdEVkZDhX
+#    }
+#    redir https://adam.nz{uri}
+#  }
+#}
+
+#pb.haume.nz {
+#  reverse_proxy pocketbase:8090 {
+#  }
+#}
+
+pw.haume.nz {
+  encode gzip
+  reverse_proxy /notifications/hub vaultwarden:3012
+  reverse_proxy vaultwarden:80
+}
+
+mahoe.haume.nz {
+ #respond "<p><p><p><center><h2>Chewing is for herbivores. &ndash; Amber O'Hearn</h2></center>"
+ #reverse_proxy whoami:80 {
+ #}
+ file_server browse {
+   hide .git
+   # this is the path **inside* the container
+   root /srv/mahoe.haume.nz/
+ }
+}

@@ -1,0 +1,19 @@
+version: '3'
+
+networks:
+  caddy:
+    external: true
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      - WEBSOCKET_ENABLED=true
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+    volumes:
+      - ./app:/data
+    networks:
+      - caddy
+
