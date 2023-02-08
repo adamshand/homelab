@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  caddy:
+    external: true
+
+# https://github.com/matrix-org/synapse/blob/e550ab17adc8dd3c48daf7fedcd09418a73f524b/contrib/docker/docker-compose.yml
+services:
+  synapse:
+    image: docker.io/matrixdotorg/synapse:latest
+    container_name: synapse
+    restart: unless-stopped
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    volumes:
+      - ./app:/data
+      - ./data/media:/data/media
+    networks:
+      - caddy
+
+  #matrix-registration-bot:
+  #  image: moanos/matrix-registration-bot:latest
+  #  environment:
+  #    LOGGING_LEVEL: DEBUG
+  #    BOT_SERVER: "https://haume.nz"
+  #    BOT_USERNAME: "registration-bot"
+  #    BOT_PASSWORD: "sanctuary-propeller-grill"
+  #    API_BASE_URL: "https://haume.nz"
+  #    #API_TOKEN: "syt_xxxxxxxxxxxxxxxxxxxxxxxx"
