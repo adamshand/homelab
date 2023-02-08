@@ -1,0 +1,25 @@
+version: '3.7'
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  pocketbase-data:
+    name: pocketbase-data
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/pocketbase/app
+
+services:
+  pocketbase:
+    image: augustodelg/pocketbase:latest
+    container_name: pocketbase
+    restart: unless-stopped
+    #ports:
+    #  - 8090:8090
+    volumes:
+      - pocketbase-data:/pb_data
+    networks:
+      - caddy

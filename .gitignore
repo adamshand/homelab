@@ -1,4 +1,12 @@
 .env*
 .*.un~
+*.delete
+*.deleteme
 *.save
+*.tar
+*.tar.gz
+*.tgz
+*.zip
 */app
+caddy/cnf/Caddyfile.*
+docker-compose.whau
