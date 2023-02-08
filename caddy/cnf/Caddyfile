@@ -9,6 +9,35 @@
   #debug
 }
 
+haume.nz, haume.nz:8448 {
+  # only needed to redirect servers to actual server
+  #header  /.well-known/matrix/* Content-Type application/json
+  #header  /.well-known/matrix/* Access-Control-Allow-Origin *
+  #respond /.well-known/matrix/server `{"m.server": "chat.haume.nz:443"}`
+  #respond /.well-known/matrix/client `{"m.homeserver": {"base_url": "https://chat.haume.nz"}}`
+  reverse_proxy /_matrix/* synapse:8008
+  reverse_proxy /_synapse/client/* synapse:8008
+  reverse_proxy /_synapse/admin/* synapse:8008
+}
+
+#matrix.haume.nz {
+#  reverse_proxy /_matrix/* synapse:8008
+#  reverse_proxy /_synapse/client/* synapse:8008
+#}
+
+doku.adam.nz {
+  reverse_proxy dokuwiki:80 {
+  }
+}
+
+#mysql.haume.nz {
+#  basicauth {
+#    adam JDJhJDE0JGc2cUFYSDMyaVFYY0FIRVkxSGNyYk9tOFZMV283ZlExRUVDbnpodFNVQXFFa001SFhYYkll
+#  }
+#  reverse_proxy adminer:8080 {
+#  }
+#}
+
 # redir + auth example
 #mysql.haume.nz {
 #  route {
@@ -29,6 +58,18 @@ pw.haume.nz {
   reverse_proxy /notifications/hub vaultwarden:3012
   reverse_proxy vaultwarden:80
 }
+
+#wp.shand.net,
+#adam.nz,
+#livingground.nz,
+#needful.nz,
+#tink.nz {
+  # basicauth /wp-admin/* {
+  #   adam JDJhJDEwJEVCNmdaNEg2Ti5iejRMYkF3MFZhZ3VtV3E1SzBWZEZ5Q3VWc0tzOEJwZE9TaFlZdEVkZDhX
+  # }
+#  reverse_proxy wordpress:80 {
+#  }
+#}
 
 mahoe.haume.nz {
  #respond "<p><p><p><center><h2>Chewing is for herbivores. &ndash; Amber O'Hearn</h2></center>"
