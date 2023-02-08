@@ -1,0 +1,18 @@
+version: '3'
+
+networks:
+  caddy:
+    external: true
+
+services:
+  dokuwiki:
+    container_name: dokuwiki
+    # image: php:7-apache
+    image: php:5-apache
+    restart: unless-stopped
+    volumes:
+      # - /srv/conf/apache.php7:/etc/apache2
+      - ./app:/var/www/html
+      - ./cnf/apache.php5:/etc/apache2
+    networks:
+      - caddy
