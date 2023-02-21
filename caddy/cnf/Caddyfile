@@ -30,6 +30,11 @@ doku.adam.nz {
   }
 }
 
+memos.haume.nz {
+  reverse_proxy memos:5230 {
+  }
+}
+
 #mysql.haume.nz {
 #  basicauth {
 #    adam JDJhJDE0JGc2cUFYSDMyaVFYY0FIRVkxSGNyYk9tOFZMV283ZlExRUVDbnpodFNVQXFFa001SFhYYkll
@@ -59,17 +64,18 @@ pw.haume.nz {
   reverse_proxy vaultwarden:80
 }
 
-#wp.shand.net,
-#adam.nz,
-#livingground.nz,
-#needful.nz,
-#tink.nz {
-  # basicauth /wp-admin/* {
-  #   adam JDJhJDEwJEVCNmdaNEg2Ti5iejRMYkF3MFZhZ3VtV3E1SzBWZEZ5Q3VWc0tzOEJwZE9TaFlZdEVkZDhX
-  # }
-#  reverse_proxy wordpress:80 {
-#  }
-#}
+adam.nz,
+livingground.nz,
+needful.nz,
+tees.haume.nz,
+tink.nz,
+wp.shand.net {
+  #basicauth /wp-admin/* {
+    #caddy hash-password 
+    #adam $2a$14$db7bdPO5qON251qEZ1c2A.iZXVgkeLc0ZlcUhhB6Ge1/rAvpbVIJa
+  #}
+  reverse_proxy wordpress:80 
+}
 
 mahoe.haume.nz {
  #respond "<p><p><p><center><h2>Chewing is for herbivores. &ndash; Amber O'Hearn</h2></center>"
