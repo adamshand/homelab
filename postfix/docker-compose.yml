@@ -1,0 +1,24 @@
+version: '2'
+services:
+  postfix:
+    image: juanluisbaptiste/postfix:latest
+    container_name: postfix
+    restart: unless-stopped
+    ports:
+      - "25:25"
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+     # - ./cnf:/etc/postfix
+    env_file:
+      - .env
+    environment:
+      - DEBUG=no
+      - SERVER_HOSTNAME=mahoe.haume.nz
+      - SMTP_HEADER_TAG=mahoe.haume.nz
+      # comma seperated subnets (cidr) which can relay
+      # - SMTP_NETWORKS=""
+      - OVERWRITE_FROM=adam+mahoe@haume.nz
+      # 10MB default
+      #- MESSAGE_SIZE_LIMIT="10240000"
+      # list of domains from which incoming messages will be accepted
+      # - DESTINATION=
