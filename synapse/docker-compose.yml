@@ -1,3 +1,4 @@
+---
 version: '3'
 
 networks:
@@ -18,12 +19,26 @@ services:
     networks:
       - caddy
 
-  #matrix-registration-bot:
-  #  image: moanos/matrix-registration-bot:latest
-  #  environment:
-  #    LOGGING_LEVEL: DEBUG
-  #    BOT_SERVER: "https://haume.nz"
-  #    BOT_USERNAME: "registration-bot"
-  #    BOT_PASSWORD: "sanctuary-propeller-grill"
-  #    API_BASE_URL: "https://haume.nz"
-  #    #API_TOKEN: "syt_xxxxxxxxxxxxxxxxxxxxxxxx"
+#  mautrix-facebook:
+#    container_name: mautrix-facebook
+#    image: dock.mau.dev/mautrix/facebook
+#    restart: unless-stopped
+#    volumes:
+#      - ./facebook:/data
+
+#  mautrix-whatsapp:
+#    container_name: mautrix-whatsapp
+#    image: dock.mau.dev/mautrix/whatsapp
+#    restart: unless-stopped
+#    volumes:
+#      - ./whatsapp:/data
+
+  # matrix-registration-bot:
+    # image: moanos/matrix-registration-bot:latest
+    # environment:
+      # LOGGING_LEVEL: DEBUG
+      # BOT_SERVER: "https://haume.nz"
+      # BOT_USERNAME: "registration-bot"
+      # BOT_PASSWORD: "sanctuary-propeller-grill"
+      # API_BASE_URL: "https://haume.nz"
+      # #API_TOKEN: "syt_xxxxxxxxxxxxxxxxxxxxxxxx"

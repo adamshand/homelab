@@ -35,6 +35,11 @@ memos.haume.nz {
   }
 }
 
+wb.haume.nz {
+  reverse_proxy wallabag:80 {
+  }
+}
+
 #mysql.haume.nz {
 #  basicauth {
 #    adam JDJhJDE0JGc2cUFYSDMyaVFYY0FIRVkxSGNyYk9tOFZMV283ZlExRUVDbnpodFNVQXFFa001SFhYYkll
