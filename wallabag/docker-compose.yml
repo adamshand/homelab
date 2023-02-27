@@ -1,0 +1,32 @@
+---
+version: '3'
+
+networks:
+  caddy:
+    external: true
+
+services:
+  wallabag:
+    # https://hub.docker.com/r/wallabag/wallabag
+    image: wallabag/wallabag
+    container_name: wallabag
+    restart: unless-stopped
+    environment:
+      - SYMFONY__ENV__SERVER_NAME="Living Ground"
+      - SYMFONY__ENV__DOMAIN_NAME=${DOMAIN_NAME}
+      - SYMFONY__ENV__MAILER_HOST=${MAILER_HOST}
+      - SYMFONY__ENV__MAILER_USER=${MAILER_USER}
+      - SYMFONY__ENV__MAILER_PASSWORD=${MAILER_PASSWORD}
+      - SYMFONY__ENV__FROM_EMAIL=${FROM_EMAIL}
+      - SYMFONY__ENV__FOSUSER_REGISTRATION=${ALLOW_REGISTRATION}
+    volumes:
+      # you must copy the db from the docker container:
+      # docker cp -a wallabag:/var/www/wallabag/data/db ./app/db
+      - ./app/db:/var/www/wallabag/data/db
+      - ./app/images:/var/www/wallabag/web/assets/images
+    healthcheck:
+      test: ["CMD", "wget" ,"--no-verbose", "--tries=1", "--spider", "http://localhost"]
+      interval: 1m
+      timeout: 3s
+    networks:
+      - caddy
