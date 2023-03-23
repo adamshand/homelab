@@ -17,8 +17,9 @@ services:
     #extra_hosts:
     #  - "host.docker.internal:172.17.0.1"
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
+      - 8448:8448
       # - "2019:2019"
     volumes:
       - ./cnf/Caddyfile:/etc/caddy/Caddyfile

@@ -9,8 +9,9 @@
   #debug
 }
 
+# Remember :8448 requires opening port in docker-compose.yml
 haume.nz, haume.nz:8448 {
-  # only needed to redirect servers to actual server
+  # only needed to redirect clients to the actual server
   #header  /.well-known/matrix/* Content-Type application/json
   #header  /.well-known/matrix/* Access-Control-Allow-Origin *
   #respond /.well-known/matrix/server `{"m.server": "chat.haume.nz:443"}`
