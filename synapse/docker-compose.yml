@@ -2,6 +2,8 @@
 version: '3'
 
 networks:
+  synapse:
+    external: true
   caddy:
     external: true
 
@@ -16,22 +18,92 @@ services:
     volumes:
       - ./app:/data
       - ./data/media:/data/media
+    #depends_on:
+    #  - facebook
+    ##  - signal
+    #  - whatsapp
+    networks:
+      - caddy
+      - synapse
+
+  element:
+    image: vectorim/element-web:latest
+    container_name: element
+    restart: unless-stopped
+    #ports:
+    #  - 88:80
+    volumes:
+      - ./app/element.json:/app/config.json
+    depends_on:
+      - synapse
     networks:
       - caddy
 
-#  mautrix-facebook:
-#    container_name: mautrix-facebook
+#  facebook:
+#    container_name: facebook
 #    image: dock.mau.dev/mautrix/facebook
 #    restart: unless-stopped
 #    volumes:
-#      - ./facebook:/data
-
-#  mautrix-whatsapp:
-#    container_name: mautrix-whatsapp
+#      - ./app/bridges/facebook:/data
+#    networks:
+#      - synapse
+#
+#  signal:
+#    container_name: signal
+#    image: dock.mau.dev/mautrix/signal
+#    restart: unless-stopped
+#    volumes:
+#      - ./app/bridges/signal:/data
+#      - ./app/bridges/signald:/signald
+#    depends_on:
+#      - signald
+#    networks:
+#      - synapse
+#
+#  signald:
+#    container_name: signald
+#    image: docker.io/signald/signald
+#    restart: unless-stopped
+#    volumes:
+#      - ./app/bridges/signald:/signald
+#    networks:
+#      - synapse
+#
+#  whatsapp:
+#    container_name: whatsapp
 #    image: dock.mau.dev/mautrix/whatsapp
 #    restart: unless-stopped
 #    volumes:
-#      - ./whatsapp:/data
+#      - ./app/bridges/whatsapp:/data
+#    networks:
+#      - synapse
+
+  # https://github.com/matrixgpt/matrix-chatgpt-bot/
+  openai:
+    image: ghcr.io/matrixgpt/matrix-chatgpt-bot:latest
+    container_name: openai
+    volumes:
+      - ./app/bridges/openai:/storage
+    environment:
+      - MATRIX_ENCRYPTION=false
+      - MATRIX_WHITELIST=@adam:haume.nz
+      # - MATRIX_BLACKLIST=
+      - OPENAI_API_KEY=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
+      - CHATGPT_CONTEXT=thread
+      - CHATGPT_API_MODEL=gpt-3.5-turbo
+      - MATRIX_HOMESERVER_URL=https://haume.nz
+      - MATRIX_BOT_USERNAME=@openai:haume.nz
+      - MATRIX_BOT_PASSWORD=Subfloor4.Strung.Estate
+      #- MATRIX_ACCESS_TOKEN=
+      - MATRIX_DEFAULT_PREFIX=!openai
+      - MATRIX_DEFAULT_PREFIX_REPLY=false
+      - MATRIX_AUTOJOIN=true
+      - MATRIX_ENCRYPTION=true
+      - MATRIX_THREADS=true
+      - MATRIX_PREFIX_DM=false
+      - MATRIX_RICH_TEXT=true
+    networks:
+      - synapse
 
   # matrix-registration-bot:
     # image: moanos/matrix-registration-bot:latest
@@ -42,3 +114,20 @@ services:
       # BOT_PASSWORD: "sanctuary-propeller-grill"
       # API_BASE_URL: "https://haume.nz"
       # #API_TOKEN: "syt_xxxxxxxxxxxxxxxxxxxxxxxx"
+    networks:
+      - synapse
+
+#  synapse_admin:
+#    image: awesometechnologies/synapse-admin:latest
+#    container_name: synapse_admin
+#    restart: unless-stopped
+#    #ports:
+#    #  use this if you don't have a reverse proxy
+#    #  - 33334:80
+#    environment:
+#      - REACT_APP_SERVER="https://chat.krakenfleet.co"
+#    depends_on:
+#      - synapse
+#    networks:
+#      - caddy
+#      - synapse

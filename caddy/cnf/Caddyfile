@@ -18,7 +18,7 @@ haume.nz, haume.nz:8448 {
   #respond /.well-known/matrix/client `{"m.homeserver": {"base_url": "https://chat.haume.nz"}}`
   reverse_proxy /_matrix/* synapse:8008
   reverse_proxy /_synapse/client/* synapse:8008
-  reverse_proxy /_synapse/admin/* synapse:8008
+  #reverse_proxy /_synapse/admin/* synapse:8008
 }
 
 #matrix.haume.nz {
@@ -29,6 +29,10 @@ haume.nz, haume.nz:8448 {
 doku.adam.nz {
   reverse_proxy dokuwiki:80 {
   }
+}
+
+chat.haume.nz {
+  reverse_proxy element:80
 }
 
 memos.haume.nz {
