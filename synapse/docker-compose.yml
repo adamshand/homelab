@@ -85,16 +85,14 @@ services:
     volumes:
       - ./app/bridges/openai:/storage
     environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - MATRIX_HOMESERVER_URL=${MATRIX_HOMESERVER_URL}
+      - MATRIX_BOT_USERNAME=${MATRIX_BOT_USERNAME}
+      - MATRIX_BOT_PASSWORD=${MATRIX_BOT_PASSWORD}
+      - MATRIX_ACCESS_TOKEN=${MATRIX_ACCESS_TOKEN}
+      - MATRIX_WHITELIST=${MATRIX_WHITELIST}
+      - MATRIX_BLACKLIST=${MATRIX_BLACKLIST}
       - MATRIX_ENCRYPTION=false
-      - MATRIX_WHITELIST=@adam:haume.nz
-      # - MATRIX_BLACKLIST=
-      - OPENAI_API_KEY=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
-      - CHATGPT_CONTEXT=thread
-      - CHATGPT_API_MODEL=gpt-3.5-turbo
-      - MATRIX_HOMESERVER_URL=https://haume.nz
-      - MATRIX_BOT_USERNAME=@openai:haume.nz
-      - MATRIX_BOT_PASSWORD=Subfloor4.Strung.Estate
-      #- MATRIX_ACCESS_TOKEN=
       - MATRIX_DEFAULT_PREFIX=!openai
       - MATRIX_DEFAULT_PREFIX_REPLY=false
       - MATRIX_AUTOJOIN=true
@@ -102,6 +100,8 @@ services:
       - MATRIX_THREADS=true
       - MATRIX_PREFIX_DM=false
       - MATRIX_RICH_TEXT=true
+      - CHATGPT_CONTEXT=thread
+      - CHATGPT_API_MODEL=gpt-3.5-turbo
     networks:
       - synapse
 
