@@ -26,13 +26,19 @@ haume.nz, haume.nz:8448 {
 #  reverse_proxy /_synapse/client/* synapse:8008
 #}
 
-doku.adam.nz {
-  reverse_proxy dokuwiki:80 {
-  }
+admin.chat.haume.nz {
+  reverse_proxy synapse-admin:80
 }
 
 chat.haume.nz {
+  reverse_proxy /_matrix/* synapse:8008
+  reverse_proxy /_synapse/client/* synapse:8008
   reverse_proxy element:80
+}
+
+doku.adam.nz {
+  reverse_proxy dokuwiki:80 {
+  }
 }
 
 memos.haume.nz {
