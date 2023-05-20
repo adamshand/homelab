@@ -1,4 +1,6 @@
-version: '2'
+---
+version: '3'
+
 services:
   postfix:
     image: juanluisbaptiste/postfix:latest
@@ -7,8 +9,8 @@ services:
     ports:
       - "25:25"
     volumes:
-     - /etc/localtime:/etc/localtime:ro
-     # - ./cnf:/etc/postfix
+      - /etc/localtime:/etc/localtime:ro
+      # - ./cnf:/etc/postfix
     env_file:
       - .env
     environment:
@@ -19,6 +21,6 @@ services:
       # - SMTP_NETWORKS=""
       - OVERWRITE_FROM=adam+mahoe@haume.nz
       # 10MB default
-      #- MESSAGE_SIZE_LIMIT="10240000"
+      # - MESSAGE_SIZE_LIMIT=10240000
       # list of domains from which incoming messages will be accepted
       # - DESTINATION=

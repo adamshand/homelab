@@ -42,17 +42,8 @@ services:
     networks:
       - synapse
 
-  whatsapp:
-    container_name: whatsapp
-    image: dock.mau.dev/mautrix/whatsapp
-    restart: unless-stopped
-    volumes:
-      - ./app/bridges/whatsapp:/data
-    depends_on:
-      - synapse-postgres
-    networks:
-      - synapse
-      - caddy
+############################
+## WEB TOOLS
 
   element:
     image: vectorim/element-web:latest
@@ -67,18 +58,103 @@ services:
     networks:
       - caddy
 
-  openai:
-    # https://github.com/matrixgpt/matrix-chatgpt-bot/
-    image: ghcr.io/matrixgpt/matrix-chatgpt-bot:latest
-    container_name: openai
-    volumes:
-      - ./app/bridges/openai:/storage
-    env_file:
-      - ./.env
+  synapse-admin:
+    # requires /_synapse/admin/* in Caddyfile
+    image: awesometechnologies/synapse-admin:latest
+    container_name: synapse-admin
+    restart: unless-stopped
+    #ports:
+    #  use this if you don't have a reverse proxy
+    #  - 33334:80
+    environment:
+      - REACT_APP_SERVER="https://haume.nz"
+    depends_on:
+      - synapse
     networks:
       - caddy
       - synapse
 
+############################
+## BOTS
+
+  whatsapp:
+    container_name: whatsapp
+    image: dock.mau.dev/mautrix/whatsapp
+    restart: unless-stopped
+    volumes:
+      - ./app/bridges/whatsapp:/data
+    depends_on:
+      - synapse-postgres
+    networks:
+      - synapse
+
+  telegram:
+    container_name: telegram
+    image: dock.mau.dev/mautrix/telegram
+    restart: unless-stopped
+    volumes:
+      - ./app/bridges/telegram:/data
+    depends_on:
+      - synapse-postgres
+    networks:
+      - synapse
+
+  signal:
+    image: dock.mau.dev/mautrix/signal
+    container_name: signal
+    restart: unless-stopped
+    volumes:
+      - ./app/bridges/signal:/data
+      - ./app/bridges/signald:/signald
+    depends_on:
+      - synapse-postgres
+      - signald
+    networks:
+      - synapse
+
+  signald:
+    image: docker.io/signald/signald
+    container_name: signald
+    restart: unless-stopped
+    volumes:
+      - ./app/bridges/signald:/signald
+    networks:
+      - synapse
+
+#  facebook:
+#    container_name: facebook
+#    image: dock.mau.dev/mautrix/facebook
+#    restart: unless-stopped
+#    volumes:
+#      - ./app/bridges/facebook:/data
+#    depends_on:
+#      - synapse-postgres
+#    networks:
+#      - synapse
+
+#  slack:
+#    container_name: slack
+#    image: dock.mau.dev/mautrix/slack
+#    restart: unless-stopped
+#    volumes:
+#      - ./app/bridges/slack:/data
+#    depends_on:
+#      - synapse-postgres
+#    networks:
+#      - synapse
+
+  #openai:
+    # https://github.com/matrixgpt/matrix-chatgpt-bot/
+  #  image: ghcr.io/matrixgpt/matrix-chatgpt-bot:latest
+  #  container_name: openai
+  #  volumes:
+  #    - ./app/bridges/openai:/storage
+  #  env_file:
+  #    - ./.env
+  #  depends_on:
+  #    - synapse
+  #  networks:
+  #    - synapse
 #    #environment:
 #      #- OPENAI_API_KEY=${OPENAI_API_KEY}
 #      #- MATRIX_HOMESERVER_URL=${MATRIX_HOMESERVER_URL}
@@ -97,52 +173,6 @@ services:
 #      #- MATRIX_RICH_TEXT=true
 #      #- CHATGPT_CONTEXT=thread
 #      #- CHATGPT_API_MODEL=gpt-3.5-turbo
-
-  synapse-admin:
-    image: awesometechnologies/synapse-admin:latest
-    container_name: synapse-admin
-    restart: unless-stopped
-    #ports:
-    #  use this if you don't have a reverse proxy
-    #  - 33334:80
-    environment:
-      - REACT_APP_SERVER="https://haume.nz"
-    depends_on:
-      - synapse
-    networks:
-      - caddy
-      - synapse
-
-#  facebook:
-#    container_name: facebook
-#    image: dock.mau.dev/mautrix/facebook
-#    restart: unless-stopped
-#    volumes:
-#      - ./app/bridges/facebook:/data
-#    networks:
-#      - synapse
-#
-#  signal:
-#    container_name: signal
-#    image: dock.mau.dev/mautrix/signal
-#    restart: unless-stopped
-#    volumes:
-#      - ./app/bridges/signal:/data
-#      - ./app/bridges/signald:/signald
-#    depends_on:
-#      - signald
-#    networks:
-#      - synapse
-#
-#  signald:
-#    container_name: signald
-#    image: docker.io/signald/signald
-#    restart: unless-stopped
-#    volumes:
-#      - ./app/bridges/signald:/signald
-#    networks:
-#      - synapse
-
 
   # matrix-registration-bot:
     # image: moanos/matrix-registration-bot:latest
