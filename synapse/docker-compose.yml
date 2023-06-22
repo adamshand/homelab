@@ -121,23 +121,23 @@ services:
     networks:
       - synapse
 
+  slack:
+    container_name: slack
+    image: dock.mau.dev/mautrix/slack
+    restart: unless-stopped
+    volumes:
+      - ./app/bridges/slack:/data
+    depends_on:
+      - synapse-postgres
+    networks:
+      - synapse
+
 #  facebook:
 #    container_name: facebook
 #    image: dock.mau.dev/mautrix/facebook
 #    restart: unless-stopped
 #    volumes:
 #      - ./app/bridges/facebook:/data
-#    depends_on:
-#      - synapse-postgres
-#    networks:
-#      - synapse
-
-#  slack:
-#    container_name: slack
-#    image: dock.mau.dev/mautrix/slack
-#    restart: unless-stopped
-#    volumes:
-#      - ./app/bridges/slack:/data
 #    depends_on:
 #      - synapse-postgres
 #    networks:

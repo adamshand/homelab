@@ -41,6 +41,11 @@ doku.adam.nz {
   }
 }
 
+photos.haume.nz {
+#  reverse_proxy lychee:80
+  reverse_proxy pigallery2:80
+}
+
 memos.haume.nz {
   reverse_proxy memos:5230 {
   }

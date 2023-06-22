@@ -1,0 +1,25 @@
+---
+version: "3"
+
+# once container is up and running, you need to login with:
+#   docker exec tailscale tailscale login
+
+services:
+  tailscale:
+    image: tailscale/tailscale:stable
+    container_name: tailscale
+    hostname: odyssey-linux-matrix
+    restart: unless-stopped
+    command: tailscaled
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./app:/var/lib
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    # environment:
+      # for ephemeral nodes ...
+      # https://login.tailscale.com/admin/settings/keys (good for max 90 days)
+      # - TS_AUTHKEY=tskey-auth...
